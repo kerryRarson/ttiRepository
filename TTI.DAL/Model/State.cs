@@ -1,5 +1,7 @@
 ﻿using System;
-
+/*
+* Legacy database entity dbo.tState
+*/
 namespace TTI.DAL.Model
 {
     public class State
