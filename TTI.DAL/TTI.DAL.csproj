@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Model\State.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\nHibernate\Maps\StateMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
