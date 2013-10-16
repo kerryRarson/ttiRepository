@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTI.DAL", "TTI.DAL.csproj", "{7D8C1C48-E93E-44AE-AEE0-3A902F9D7D66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTI.DAL.Tests", "..\TTI.DAL.Tests\TTI.DAL.Tests.csproj", "{495DF448-E654-478C-A663-4B7C6222C2D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{7D8C1C48-E93E-44AE-AEE0-3A902F9D7D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D8C1C48-E93E-44AE-AEE0-3A902F9D7D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D8C1C48-E93E-44AE-AEE0-3A902F9D7D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{495DF448-E654-478C-A663-4B7C6222C2D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{495DF448-E654-478C-A663-4B7C6222C2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{495DF448-E654-478C-A663-4B7C6222C2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{495DF448-E654-478C-A663-4B7C6222C2D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
