@@ -17,6 +17,7 @@ namespace TTI.DAL.Repository.NHibernate
         public NHibernateRepository()
         {
             log4net.Config.XmlConfigurator.Configure();
+            // TODO  - this should be in a .config somewhere!
             config = Fluently.Configure()
                 .Database(
                     MsSqlConfiguration
