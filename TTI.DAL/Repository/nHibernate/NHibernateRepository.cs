@@ -35,18 +35,13 @@ namespace TTI.DAL.Repository.NHibernate
 
         public T Get(object id)
         {
-            //using (var session = sessionFactory.OpenSession())
-            ////using (var transaction = session.BeginTransaction())
-            //{
+            
                 T returnVal = _session.Get<T>(id);
-                //transaction.Commit();
                 return returnVal;
-            //}
         }
 
         public void Save(T value)
         {
-            //using (var session = sessionFactory.OpenSession())
             using (var transaction = _session.BeginTransaction())
             {
                 _session.Save(value);
@@ -66,7 +61,6 @@ namespace TTI.DAL.Repository.NHibernate
 
         public void Delete(T value)
         {
-            //using (var session = sessionFactory.OpenSession())
             using (var transaction = _session.BeginTransaction())
             {
                 _session.Delete(value);
@@ -77,10 +71,8 @@ namespace TTI.DAL.Repository.NHibernate
         public IList<T> GetAll()
         {
             using (var session = sessionFactory.OpenSession())
-            //using (var transaction = session.BeginTransaction())
             {
                 IList<T> returnVal = session.CreateCriteria<T>().List<T>();
-                //transaction.Commit();
                 return returnVal;
             }
         }
@@ -98,39 +90,4 @@ namespace TTI.DAL.Repository.NHibernate
         /// </summary>
         ThisWillDropMyDatabase
     }
-
-    //public class NHibernateSessionManager<T>
-    //{
-    //    protected Configuration config;
-    //    private readonly ISessionFactory _sessionFactory;
-    //    public static readonly NHibernateSessionManager<T> Instance = new NHibernateSessionManager<T>();
-
-    //    private NHibernateSessionManager()
-    //    {
-    //        if (_sessionFactory == null)
-    //        {
-    //            System.Diagnostics.Debug.WriteLine("Factory is null - instantiating...");
-    //            //_sessionFactory = (new Configuration().Configure().BuildSessionFactory());
-    //            config = Fluently.Configure()
-    //            .Database(
-    //                MsSqlConfiguration
-    //                .MsSql2008
-    //                .DefaultSchema("dbo")
-    //                .ConnectionString(@"Data Source=.;Initial Catalog=TTIflood;Integrated Security=True"))
-    //                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateRepository<T>>())
-    //            .BuildConfiguration();
-
-    //            _sessionFactory = config.BuildSessionFactory();
-    //        }
-    //    }
-
-    //    public ISession GetSession()
-    //    {
-    //        return _sessionFactory.OpenSession();
-    //    }
-    //    public void Initialize()
-    //    {
-    //        ISession disposeMe = Instance.GetSession();
-    //    }
-    //}
 }
