@@ -13,11 +13,17 @@ namespace TTI.DAL.Tests
         [TestMethod]
         public void TestLoadStates()
         {
+            //instansiate the presenter.
             var presenter = new DemoPresenter(_view);
+            
+            //tell the presenter to get the states
             presenter.LoadStates();
         }
 
         #region Mock View
+        /*
+        * This is a mock class representing either a windows form or a webform.
+        */
         private class MockDemoView : IDemoView
         {
             public void UpdateStatus(string statusText)
