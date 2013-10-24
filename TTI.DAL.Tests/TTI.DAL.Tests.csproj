@@ -52,12 +52,17 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DALTests.cs" />
+    <Compile Include="DemoPresenter.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TTI.DAL\TTI.DAL.csproj">
       <Project>{7d8c1c48-e93e-44ae-aee0-3a902f9d7d66}</Project>
       <Name>TTI.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TTI.DemoPresenter\TTI.DemoPresenter.csproj">
+      <Project>{f50dc977-0a42-496c-afef-a24343bcd310}</Project>
+      <Name>TTI.DemoPresenter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

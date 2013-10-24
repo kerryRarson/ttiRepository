@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTI.DAL", "TTI.DAL.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTI.DAL.Tests", "..\TTI.DAL.Tests\TTI.DAL.Tests.csproj", "{495DF448-E654-478C-A663-4B7C6222C2D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTI.DemoPresenter", "..\TTI.DemoPresenter\TTI.DemoPresenter.csproj", "{F50DC977-0A42-496C-AFEF-A24343BCD310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWinForm", "DemoWinForm\DemoWinForm.csproj", "{5C111037-4918-4B78-991F-8D66A5C13E83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{495DF448-E654-478C-A663-4B7C6222C2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{495DF448-E654-478C-A663-4B7C6222C2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{495DF448-E654-478C-A663-4B7C6222C2D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F50DC977-0A42-496C-AFEF-A24343BCD310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50DC977-0A42-496C-AFEF-A24343BCD310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50DC977-0A42-496C-AFEF-A24343BCD310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50DC977-0A42-496C-AFEF-A24343BCD310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C111037-4918-4B78-991F-8D66A5C13E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C111037-4918-4B78-991F-8D66A5C13E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C111037-4918-4B78-991F-8D66A5C13E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C111037-4918-4B78-991F-8D66A5C13E83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
