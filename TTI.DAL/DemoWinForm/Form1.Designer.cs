@@ -32,6 +32,7 @@
             this.btnLoadStates = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnLoadStatesAsync = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,11 +69,22 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 17);
             // 
+            // btnLoadStatesAsync
+            // 
+            this.btnLoadStatesAsync.Location = new System.Drawing.Point(190, 38);
+            this.btnLoadStatesAsync.Name = "btnLoadStatesAsync";
+            this.btnLoadStatesAsync.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadStatesAsync.TabIndex = 3;
+            this.btnLoadStatesAsync.Text = "Load Async";
+            this.btnLoadStatesAsync.UseVisualStyleBackColor = true;
+            this.btnLoadStatesAsync.Click += new System.EventHandler(this.btnLoadStatesAsync_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.btnLoadStatesAsync);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnLoadStates);
             this.Controls.Add(this.cboStates);
@@ -92,6 +104,7 @@
         private System.Windows.Forms.Button btnLoadStates;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.Button btnLoadStatesAsync;
     }
 }
 
