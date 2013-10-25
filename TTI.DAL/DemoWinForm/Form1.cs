@@ -21,11 +21,13 @@ namespace DemoWinForm
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //create the presenter & pass it a reference to ourselves. ( this form inherits the IDemoView interface )
             _presenter = new DemoPresenter(this);
         }
 
         public void UpdateStatus(string statusText)
         {
+            //Check to see if the call came from a different thread
             if (statusStrip1.InvokeRequired)
             {
                 statusStrip1.BeginInvoke(
@@ -67,12 +69,14 @@ namespace DemoWinForm
             LoadStatesAsync();
         }
         private void LoadStatesAsync(){
+            #region create the thread to search on 
             var searchThread = new Thread( new ThreadStart( ()=>
                     {
                         try
                         {
                             Thread.Sleep(5000);
                             _presenter.LoadStates();
+                            #region ulock the UI from this thread
                             this.BeginInvoke(
                                 new Action(() =>
                                 {
@@ -80,9 +84,11 @@ namespace DemoWinForm
                                     UnlockUI();
                                 })
                                 );
+                            #endregion
                         }
                         catch (Exception err)
                         {
+                            //pass the error to the UI thread
                              this.BeginInvoke(
                                         new Action(() =>
                                         {
@@ -93,7 +99,9 @@ namespace DemoWinForm
                                         }));
                         }
                     })
-                );
+            );
+            #endregion
+            
             searchThread.Start();
         }
     }
