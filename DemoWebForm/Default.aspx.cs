@@ -22,6 +22,7 @@ namespace DemoWebForm
             System.Diagnostics.Debug.WriteLine(statusText);
         }
 
+        //** NOTE: in the real world the TTI.DAL.Models would be in their own .dll This would keep any data access dependencies out of the UI **
         public void BindStates(IList<TTI.DAL.Model.State> states)
         {
             //this method is called from the presenter after the states are pulled from the DB.
