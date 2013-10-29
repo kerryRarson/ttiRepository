@@ -8,6 +8,8 @@ using TTI.Demo;
 
 namespace DemoWebForm
 {
+    // NOTE: this view inherits the IDemoView interface allowing us to pass
+    // an instance of ourselves to the presenter. ( instantiated in page_load )
     public partial class _Default : Page, IDemoView
     {
         private DemoPresenter _presenter;
