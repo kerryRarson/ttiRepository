@@ -13,7 +13,7 @@ namespace DemoWinForm
 {
     public partial class Form1 : Form , IDemoView
     {
-        private DemoPresenter _presenter;
+        private Presenter.DemoPresenter _presenter;
         public Form1()
         {
             InitializeComponent();
