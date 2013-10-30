@@ -12,7 +12,7 @@ namespace DemoWebForm
     // an instance of ourselves to the presenter. ( instantiated in page_load )
     public partial class _Default : Page, IDemoView
     {
-        private DemoPresenter _presenter;
+        private Presenter.DemoPresenter _presenter;
         protected void Page_Load(object sender, EventArgs e)
         {
             _presenter = new DemoPresenter(this);
