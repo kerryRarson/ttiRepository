@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TTI.DAL;
 
-namespace TTI.Demo
+namespace TTI.Demo.Presenter
 {
     public class DemoPresenter
     {
