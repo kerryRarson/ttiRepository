@@ -26,7 +26,6 @@ namespace TTI.Demo.Presenter
             var states = _entityRepository.GetStateList();
             //pass the results back to the caller
             _view.BindStates(states);
-            //_view.UpdateStatus(string.Format("presenter bound {0} states to the calling view.", states.Count));
 
         }
     }
