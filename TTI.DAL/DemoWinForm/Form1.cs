@@ -66,6 +66,8 @@ namespace DemoWinForm
         private void btnLoadStatesAsync_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.AppStarting;
+            UpdateStatus("Loading...");
+            LockUI();
             LoadStatesAsync();
         }
         private void LoadStatesAsync(){
@@ -75,11 +77,11 @@ namespace DemoWinForm
                         try
                         {
                             Thread.Sleep(5000);
-                            _presenter.LoadStates();
-                            #region ulock the UI from this thread
+                            #region unlock the UI from this thread
                             this.BeginInvoke(
                                 new Action(() =>
                                 {
+                                    _presenter.LoadStates();
                                     Cursor = Cursors.Default;
                                     UnlockUI();
                                 })
