@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using TTI.Demo;
+using TTI.Demo.Presenter;
 
 namespace DemoWebForm
 {
@@ -12,7 +12,7 @@ namespace DemoWebForm
     // an instance of ourselves to the presenter. ( instantiated in page_load )
     public partial class _Default : Page, IDemoView
     {
-        private Presenter.DemoPresenter _presenter;
+        private DemoPresenter _presenter;
         protected void Page_Load(object sender, EventArgs e)
         {
             _presenter = new DemoPresenter(this);

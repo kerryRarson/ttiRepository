@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using TTI.Demo;
+using TTI.Demo.Presenter;
 
 namespace DemoWinForm
 {
     public partial class Form1 : Form , IDemoView
     {
-        private Presenter.DemoPresenter _presenter;
+        private DemoPresenter _presenter;
         public Form1()
         {
             InitializeComponent();

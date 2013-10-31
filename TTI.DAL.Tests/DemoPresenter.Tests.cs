@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TTI.DAL;
-using TTI.Demo;
+using TTI.Demo.Presenter;
 
 namespace TTI.DAL.Tests
 {
