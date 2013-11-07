@@ -12,24 +12,20 @@ namespace TTI.DAL.Repository.NHibernate
         public IList<Entity> GetEntitiesByParentId(long parentEntityID)
         {
             IList<Entity> returnVal = null;
-            //using (var session = sessionFactory.OpenSession())
-            //{
-                returnVal = _session.CreateCriteria<Entity>()
+            returnVal = _session.CreateCriteria<Entity>()
                     .Add(Restrictions.Eq("ParentEntityID", parentEntityID))
                     .Add(Restrictions.Eq("Active", true))
                     .AddOrder(new Order("Name", true))
                     .List<Entity>();
-            //}
+            
             return returnVal;
         }
 
         public IList<Entity> GetEntitiesByState(string stateAbbreviation)
         {
             IList<Entity> returnVal = null;
-            //using (var session = sessionFactory.OpenSession())
-            //{
-                string sql = "exec dbo.GetEntitiesByState @state=:state";
-                returnVal = _session.CreateSQLQuery(sql)
+            string sql = "exec dbo.GetEntitiesByState @state=:state";
+            returnVal = _session.CreateSQLQuery(sql)
                     .AddEntity(typeof(Entity))
                     .SetAnsiString("state", stateAbbreviation)
                     .List<Entity>()
@@ -50,8 +46,6 @@ namespace TTI.DAL.Repository.NHibernate
                         StateLicenseNumber = x.StateLicenseNumber
                     })
                     .ToList();
-            //}
-
             return returnVal;
         }
 
