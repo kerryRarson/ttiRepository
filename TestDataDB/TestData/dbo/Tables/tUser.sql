@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[tUser] (
+    [iUser_ID]                                 BIGINT        NOT NULL,
+    [sUsername]                                VARCHAR (50)  NOT NULL,
+    [sPassword]                                VARCHAR (100) NOT NULL,
+    [bActive]                                  BIT           NOT NULL,
+    [dtLastUpdated]                            DATETIME      NULL,
+    [sLastUpdatedBy]                           VARCHAR (50)  NULL,
+    [sSecurityQuestion]                        VARCHAR (500) NULL,
+    [sSecurityAnswer]                          VARCHAR (500) NULL,
+    [dtCreated]                                DATETIME      NULL,
+    [sCreatedBy]                               VARCHAR (50)  NULL,
+    [iEntity_ID]                               BIGINT        NOT NULL,
+    [iUserType_ID]                             INT           NULL,
+    [iCreatedByUser_ID]                        BIGINT        NULL,
+    [iLastUpdatedByUser_ID]                    BIGINT        NULL,
+    [bIsLockedOut]                             BIT           NOT NULL,
+    [dtLastLoginDate]                          DATETIME      NULL,
+    [dtLastActivityDate]                       DATETIME      NULL,
+    [dtLastPasswordChangedDate]                DATETIME      NULL,
+    [dtLastLockoutDate]                        DATETIME      NULL,
+    [iFailedPasswordAttemptCount]              INT           NOT NULL,
+    [dtFailedPasswordAttemptWindowStart]       DATETIME      NULL,
+    [iFailedPasswordAnswerAttemptCount]        INT           NOT NULL,
+    [dtFailedPasswordAnswerAttemptWindowStart] DATETIME      NULL
+);
+
