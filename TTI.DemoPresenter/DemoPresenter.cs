@@ -20,9 +20,14 @@ namespace TTI.Demo.Presenter
 
         public void LoadStates()
         {
+
+            //test an error
+            //throw new Exception("Something bad happened in the presenter.");
+
             _view.UpdateStatus("in the presenter::Loading States...");
             
             // get the list of states from the repository
+            System.Threading.Thread.Sleep(10000);
             var states = _entityRepository.GetStateList();
             //pass the results back to the caller
             _view.BindStates(states);

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using TTI.Demo.Presenter;
 
@@ -49,8 +50,10 @@ namespace DemoWinForm
 
         private void btnLoadStates_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
             LockUI();
             _presenter.LoadStates();
+            Cursor = Cursors.Default;
         }
         private void LockUI()
         {
@@ -70,41 +73,24 @@ namespace DemoWinForm
             LockUI();
             LoadStatesAsync();
         }
-        private void LoadStatesAsync(){
-            #region create the thread to search on 
-            var searchThread = new Thread( new ThreadStart( ()=>
-                    {
-                        try
-                        {
-                            Thread.Sleep(5000);
-                            #region unlock the UI from this thread
-                            this.BeginInvoke(
-                                new Action(() =>
-                                {
-                                    _presenter.LoadStates();
-                                    Cursor = Cursors.Default;
-                                    UnlockUI();
-                                })
-                                );
-                            #endregion
-                        }
-                        catch (Exception err)
-                        {
-                            //pass the error to the UI thread
-                             this.BeginInvoke(
-                                        new Action(() =>
-                                        {
-                                            Cursor = Cursors.Default;
-                                            UnlockUI();
-                                            UpdateStatus("An error occured! " + err.ToString());
-                                            MessageBox.Show("Thread did not complete!");
-                                        }));
-                        }
-                    })
-            );
-            #endregion
-            
-            searchThread.Start();
+        private async void LoadStatesAsync(){
+            try
+            {
+                await Task.Run(() =>
+                {
+                    _presenter.LoadStates();
+                    Cursor = Cursors.Default;
+                    UnlockUI();
+                });
+            }
+            catch (Exception err)
+            {
+                Cursor = Cursors.Default;
+                UnlockUI();
+                UpdateStatus("An error occured! Thread did not complete.");
+                MessageBox.Show(err.ToString());
+              
+            }
         }
     }
 }
