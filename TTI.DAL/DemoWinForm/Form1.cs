@@ -59,11 +59,13 @@ namespace DemoWinForm
         {
             btnLoadStates.Enabled = false;
             btnLoadStatesAsync.Enabled = false;
+            cboStates.Enabled = false;
         }
         private void UnlockUI()
         {
             btnLoadStates.Enabled = true;
             btnLoadStatesAsync.Enabled = true;
+            cboStates.Enabled = true;
         }
 
         private void btnLoadStatesAsync_Click(object sender, EventArgs e)
