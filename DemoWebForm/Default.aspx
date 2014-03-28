@@ -21,7 +21,7 @@
     <ol class="round">
         <li class="one">
             <h5>Using the MVP pattern</h5>
-            Clicking the 'Load' button will tell the persenter to load the states dropdown from the states table in the DB. (same codebase as the windows form )
+            Clicking the 'Load' button will tell the presenter to load the states dropdown from the states table in the DB. (same codebase as the windows form )
             <div><asp:ListBox runat="server" id="cboStates"></asp:ListBox></div>&nbsp;<asp:Button runat="server" ID="btnLoad" Text="Load" OnClick="btnLoad_Click" />
         </li>
         <li class="two">
