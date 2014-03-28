@@ -94,5 +94,28 @@ namespace DemoWinForm
               
             }
         }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.AppStarting;
+            UpdateStatus("running...");
+            System.Diagnostics.Debug.WriteLine(string.Format("ThreadId [{0}]", System.Threading.Thread.CurrentThread.ManagedThreadId));
+            var states = await Task<List<string>>.Run( () => { return longRunningFunction(); });
+            
+            cboStates.DataSource = states;
+            UpdateStatus(string.Format("{0} loaded.", states.Count));
+            Cursor = Cursors.Default;
+        }
+        private List<string> longRunningFunction()
+        {
+            System.Diagnostics.Debug.WriteLine(string.Format("ThreadId [{0}]", System.Threading.Thread.CurrentThread.ManagedThreadId));
+            var rtn = new List<string>();
+            System.Threading.Thread.Sleep(10000);
+            rtn.Add("AK");
+            rtn.Add("IL");
+            rtn.Add("MT");
+            rtn.Add("WY");
+            return rtn;
+        }
     }
 }
