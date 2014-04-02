@@ -7,14 +7,14 @@ using NHibernate.Tool.hbm2ddl;
 
 namespace TTI.DAL.Repository.nHibernate
 {
-    public class NHibernateRepository<T> : IRepository<T> where T : class
+    public class DPIRepository<T> : IRepository<T> where T : class
     {
         protected Configuration config;
         protected ISessionFactory sessionFactory;
         protected readonly ISession _session;
-            
-        
-        public NHibernateRepository()
+
+
+        public DPIRepository()
         {
             log4net.Config.XmlConfigurator.Configure();
             // TODO  - this should be in a .config somewhere!
@@ -23,8 +23,8 @@ namespace TTI.DAL.Repository.nHibernate
                     MsSqlConfiguration
                     .MsSql2008
                     .DefaultSchema("dbo")
-                    .ConnectionString(@"Data Source=.;Initial Catalog=testData;Integrated Security=True"))
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateRepository<T>>())
+                    .ConnectionString(@"Data Source=10.1.2.33;Initial Catalog=DataPro;User Id=dp_user;Password=us3rPr0$$;Connect Timeout=60"))
+                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<DPIRepository<T>>())
                 .BuildConfiguration();
             if (sessionFactory == null)
             {
@@ -35,9 +35,9 @@ namespace TTI.DAL.Repository.nHibernate
 
         public T Get(object id)
         {
-            
-                T returnVal = _session.Get<T>(id);
-                return returnVal;
+
+            T returnVal = _session.Get<T>(id);
+            return returnVal;
         }
 
         public void Save(T value)
@@ -83,11 +83,5 @@ namespace TTI.DAL.Repository.nHibernate
         }
     }
 
-    public enum SanityCheck
-    {
-        /// <summary>
-        /// By executing this function you risk loss of data. All mapped entity tables will be DROPPED.
-        /// </summary>
-        ThisWillDropMyDatabase
-    }
+   
 }

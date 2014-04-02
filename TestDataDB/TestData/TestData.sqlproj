@@ -77,5 +77,6 @@
     <Build Include="dbo\Stored Procedures\GetEntitiesByState.sql" />
     <Build Include="dbo\Stored Procedures\GetEntitiesByStateSlowly.sql" />
     <Build Include="Security\lookup.sql" />
+    <Build Include="Security\lookup_1.sql" />
   </ItemGroup>
 </Project>

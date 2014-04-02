@@ -15,7 +15,7 @@ namespace TTI.Demo.Presenter
         public DemoPresenter(IDemoView view)
         {
             _view = view;
-            _entityRepository = new DAL.Repository.NHibernate.EntityRepository();
+            _entityRepository = new DAL.Repository.nHibernate.EntityRepository();
         }
 
         public void LoadStates()
@@ -32,6 +32,13 @@ namespace TTI.Demo.Presenter
             //pass the results back to the caller
             _view.BindStates(states);
 
+        }
+
+        public void LoadClubs()
+        {
+            var dpi = new DAL.Repository.nHibernate.CurBioRepository();
+            var clubs = dpi.GetClubs();
+            //_view.BindStates(clubs);
         }
     }
 }
