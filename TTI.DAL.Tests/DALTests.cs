@@ -14,7 +14,10 @@ namespace TTI.DAL.Tests
             var clubs = ctx.GetClubs();
             Assert.IsNotNull(clubs);
             Assert.IsTrue(clubs.Count > 0);
-            Console.WriteLine(clubs.Count + " " + clubs.First());
+            foreach (var item in clubs)
+            {
+                Console.WriteLine(item);
+            }
         }
         [TestMethod]
         public void DPICurBio()

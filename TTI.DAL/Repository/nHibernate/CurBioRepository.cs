@@ -24,19 +24,11 @@ namespace TTI.DAL.Repository.nHibernate
       
         public IList<string> GetClubs()
         {
-            var criteria = _session.CreateCriteria(typeof(CurBio));
-            criteria.SetProjection(
-                Projections.Distinct(Projections.ProjectionList()
-                .Add(Projections.Alias(Projections.Property("Team"), "Team"))
-                )
-            );
-            criteria.SetResultTransformer(new NHibernate.Transform.AliasToBeanResultTransformer(typeof(CurBio)));
-            var rtn = criteria.List<CurBio>();
-            foreach (var item in rtn)
-            {
-                System.Diagnostics.Debug.WriteLine(string.Format("Team - {0}", item.Team));
-            }
-            return new List<string>() { "xxx"};
+            var sql = string.Format("select distinct name_abbrev from global.team_history where sport_code = 'mlb'  and year = {0} order by name_abbrev", 2014);
+            var query = _session.CreateSQLQuery(sql);
+            //var result = query.UniqueResult();
+            var result = query.List<string>();
+            return result;
         }
     }
 }
