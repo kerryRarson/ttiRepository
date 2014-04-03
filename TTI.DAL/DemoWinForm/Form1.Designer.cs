@@ -34,6 +34,7 @@
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnLoadStatesAsync = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.lstPlayers = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@
             this.cboStates.Name = "cboStates";
             this.cboStates.Size = new System.Drawing.Size(171, 21);
             this.cboStates.TabIndex = 0;
+            this.cboStates.SelectedIndexChanged += new System.EventHandler(this.cboStates_SelectedIndexChanged);
             // 
             // btnLoadStates
             // 
@@ -90,11 +92,20 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // lstPlayers
+            // 
+            this.lstPlayers.FormattingEnabled = true;
+            this.lstPlayers.Location = new System.Drawing.Point(12, 124);
+            this.lstPlayers.Name = "lstPlayers";
+            this.lstPlayers.Size = new System.Drawing.Size(253, 95);
+            this.lstPlayers.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.lstPlayers);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnLoadStatesAsync);
             this.Controls.Add(this.statusStrip1);
@@ -118,6 +129,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
         private System.Windows.Forms.Button btnLoadStatesAsync;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox lstPlayers;
     }
 }
 

@@ -34,11 +34,19 @@ namespace TTI.Demo.Presenter
 
         }
 
-        public void LoadClubs()
+        public IList<string> LoadClubs()
         {
             var dpi = new DAL.Repository.nHibernate.CurBioRepository();
             var clubs = dpi.GetClubs();
             //_view.BindStates(clubs);
+            return clubs;
+        }
+
+        public IList<TTI.DAL.Model.CurBio> GetPlayersByClub(string club)
+        {
+            var dpi = new DAL.Repository.nHibernate.CurBioRepository();
+            var players = dpi.GetPlayersByClub(club);
+            return players;
         }
     }
 }

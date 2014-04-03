@@ -14,9 +14,16 @@ namespace TTI.DAL.Repository.nHibernate
             IList<CurBio> returnVal = null;
             returnVal = _session.CreateCriteria<CurBio>()
                 .Add(Restrictions.Eq("Team", club))
+                .Add(Restrictions.Eq("Year", System.DateTime.Now.Year))
                 .AddOrder(new Order("Name", true))
                 .List<CurBio>();
-
+            //var criteria = _session.CreateCriteria(typeof(CurBio));
+            //criteria.SetProjection(
+            //    Projections.Distinct(Projections.ProjectionList()
+            //    .Add(Projections.Alias(Projections.Property("Team"), "Team"))
+            //    )
+            //);
+            
             return returnVal;
         }
 

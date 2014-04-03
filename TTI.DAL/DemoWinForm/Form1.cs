@@ -99,6 +99,8 @@ namespace DemoWinForm
         {
             Cursor = Cursors.AppStarting;
             UpdateStatus("running...");
+            cboStates.Items.Clear();
+
             System.Diagnostics.Debug.WriteLine(string.Format("ThreadId [{0}]", System.Threading.Thread.CurrentThread.ManagedThreadId));
             var states = await Task<List<string>>.Run( () => { return longRunningFunction(); });
             
@@ -106,16 +108,38 @@ namespace DemoWinForm
             UpdateStatus(string.Format("{0} loaded.", states.Count));
             Cursor = Cursors.Default;
         }
-        private List<string> longRunningFunction()
+        private IList<string> longRunningFunction()
         {
             System.Diagnostics.Debug.WriteLine(string.Format("ThreadId [{0}]", System.Threading.Thread.CurrentThread.ManagedThreadId));
-            var rtn = new List<string>();
             System.Threading.Thread.Sleep(10000);
-            rtn.Add("AK");
-            rtn.Add("IL");
-            rtn.Add("MT");
-            rtn.Add("WY");
+            var rtn = _presenter.LoadClubs();
             return rtn;
+        }
+
+        private IList<TTI.DAL.Model.CurBio> getPlayersFor(string org)
+        {
+            var players = _presenter.GetPlayersByClub(org);
+            return players;
+        }
+        private async void cboStates_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //load the players for the selected org
+            Cursor = Cursors.WaitCursor;
+            string club = cboStates.SelectedValue.ToString();
+            UpdateStatus(string.Format("Getting players for {0}...", club));
+            var players = await Task<List<TTI.DAL.Model.CurBio>>.Run(() => { return getPlayersFor(club); });
+
+            //lstPlayers.ValueMember = "PlayerId";
+            //lstPlayers.DisplayMember = "Name";
+            //lstPlayers.DataSource = players;
+            ////lstPlayers.Refresh();
+            lstPlayers.Items.Clear();
+            foreach (var player in players)
+            {
+                lstPlayers.Items.Add( player.Name + " " + player.Pos);
+            }
+            UpdateStatus(string.Format("{0} players.", players.Count));
+            Cursor = Cursors.Default;
         }
     }
 }
