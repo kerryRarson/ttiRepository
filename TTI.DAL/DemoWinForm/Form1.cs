@@ -168,7 +168,8 @@ namespace DemoWinForm
             sw.Stop();
             Cursor = Cursors.Default;
             UpdateStatus(string.Format("Completed in {0} seconds.", sw.Elapsed));
-            
+            this.Refresh();
+
             //write them all to disk
             foreach (Task<string> result in tasks)
             {
@@ -182,11 +183,63 @@ namespace DemoWinForm
                     writer.Flush();
                     writer.Close();
                 }
-                //Load it into a dataset
+
+                //Load it into a dataset so we can bcp it
                 var ds = new DataSet();
                 ds.ReadXml(fileName);
                 lstPlayers.Items.Add(string.Format("{0} tables in {1} dataset...", ds.Tables.Count, fileName));
                 lstPlayers.Items.Add(string.Format("{0} rows.", ds.Tables[1].Rows.Count));
+
+                if (fileName.ToLower().Contains("cur_bio"))
+                {
+                    using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(CONN_STRING))
+                    {
+                        conn.Open();
+                        using (System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("truncate table temp.curBio_v2", conn))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                        conn.Close();
+                    }
+                    using (System.Data.SqlClient.SqlBulkCopy sbc = new System.Data.SqlClient.SqlBulkCopy(CONN_STRING))
+                    {
+                        sbc.DestinationTableName="temp.curBio_v2";
+                        sbc.BatchSize = 1000;
+                        sbc.BulkCopyTimeout = 300;
+                        //map the xml attribute to the db column
+                        sbc.ColumnMappings.Add("player_id", "player_id");
+                        sbc.ColumnMappings.Add("season", "season");
+                        sbc.ColumnMappings.Add("player", "player");
+                        sbc.ColumnMappings.Add("name_last", "name_last");
+                        sbc.ColumnMappings.Add("name_first", "name_first");
+                        sbc.ColumnMappings.Add("name_middle", "name_middle");
+                        sbc.ColumnMappings.Add("name_use", "name_use");
+                        sbc.ColumnMappings.Add("name_matrilineal", "name_matrilineal");
+                        sbc.ColumnMappings.Add("team_id", "team_id");
+                        sbc.ColumnMappings.Add("organization_id", "organization_id");
+                        sbc.ColumnMappings.Add("primary_position", "primary_position");
+                        sbc.ColumnMappings.Add("jersey_number", "jersey_number");
+                        sbc.ColumnMappings.Add("bis_id", "bis_id");
+                        sbc.ColumnMappings.Add("bats", "bats");
+                        sbc.ColumnMappings.Add("throws", "throws");
+                        sbc.ColumnMappings.Add("height", "height");
+                        sbc.ColumnMappings.Add("weight", "weight");
+                        sbc.ColumnMappings.Add("birth_date", "birth_date");
+                        sbc.ColumnMappings.Add("birth_place", "birth_place");
+                        sbc.ColumnMappings.Add("how_obtained", "how_obtained");
+                        sbc.ColumnMappings.Add("college", "college");
+                        sbc.ColumnMappings.Add("date_signed", "date_signed");
+
+                        sw.Reset();
+                        sw.Start();
+                        //push it up to the server
+                        sbc.WriteToServer(ds.Tables[1]);
+                        sw.Stop();
+                        lstPlayers.Items.Add(string.Format("{0} rows inserted in {1} seconds.", ds.Tables[1].Rows.Count, sw.Elapsed));
+                    }
+                    
+                }
+                
 
             }
         }
