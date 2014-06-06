@@ -23,7 +23,7 @@ namespace TTI.DAL.Repository.nHibernate
                     MsSqlConfiguration
                     .MsSql2008
                     .DefaultSchema("dbo")
-                    .ConnectionString(@"Data Source=10.1.2.33;Initial Catalog=DataPro;User Id=dp_user;Password=us3rPr0$$;Connect Timeout=60"))
+                    .ConnectionString(CONN))
                     .Mappings(m => m.FluentMappings.AddFromAssemblyOf<DPIRepository<T>>())
                 .BuildConfiguration();
             if (sessionFactory == null)
