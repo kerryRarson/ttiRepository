@@ -25,7 +25,13 @@ namespace DemoWinForm
         private void Form1_Load(object sender, EventArgs e)
         {
             //create the presenter & pass it a reference to ourselves. ( this form inherits the IDemoView interface )
-            _presenter = new DemoPresenter(this);
+            try { _presenter = new DemoPresenter(this); }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine(err.ToString());
+                this.Text = "Could not instantiate presenter object.";
+            }
+            
         }
 
         public void UpdateStatus(string statusText)
@@ -158,12 +164,11 @@ namespace DemoWinForm
             Cursor = Cursors.AppStarting;
             sw.Start();
             //kick them all off & wait until they've all completed.
-            //Task.WaitAll(tasks.ToArray());
             await Task.WhenAll(tasks.ToArray());
-            //var xml = new WebClient().DownloadString(new Uri(uris.First()));
             sw.Stop();
             Cursor = Cursors.Default;
             UpdateStatus(string.Format("Completed in {0} seconds.", sw.Elapsed));
+            
             //write them all to disk
             foreach (Task<string> result in tasks)
             {
@@ -177,6 +182,12 @@ namespace DemoWinForm
                     writer.Flush();
                     writer.Close();
                 }
+                //Load it into a dataset
+                var ds = new DataSet();
+                ds.ReadXml(fileName);
+                lstPlayers.Items.Add(string.Format("{0} tables in {1} dataset...", ds.Tables.Count, fileName));
+                lstPlayers.Items.Add(string.Format("{0} rows.", ds.Tables[1].Rows.Count));
+
             }
         }
         static async Task<string> downloadFile(string url)
