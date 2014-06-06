@@ -35,6 +35,7 @@
             this.btnLoadStatesAsync = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.lstPlayers = new System.Windows.Forms.ListBox();
+            this.btnDownload = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,11 +101,22 @@
             this.lstPlayers.Size = new System.Drawing.Size(253, 95);
             this.lstPlayers.TabIndex = 5;
             // 
+            // btnDownload
+            // 
+            this.btnDownload.Location = new System.Drawing.Point(108, 92);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(75, 23);
+            this.btnDownload.TabIndex = 6;
+            this.btnDownload.Text = "Download";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.lstPlayers);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnLoadStatesAsync);
@@ -130,6 +142,7 @@
         private System.Windows.Forms.Button btnLoadStatesAsync;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListBox lstPlayers;
+        private System.Windows.Forms.Button btnDownload;
     }
 }
 

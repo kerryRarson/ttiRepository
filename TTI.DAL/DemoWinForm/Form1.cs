@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,7 +91,7 @@ namespace DemoWinForm
             {
                 Cursor = Cursors.Default;
                 UnlockUI();
-                UpdateStatus("An error occured! Thread did not complete.");
+                UpdateStatus("An error occurred! Thread did not complete.");
                 MessageBox.Show(err.ToString());
               
             }
@@ -140,6 +142,46 @@ namespace DemoWinForm
             }
             UpdateStatus(string.Format("{0} players.", players.Count));
             Cursor = Cursors.Default;
+        }
+
+        private async void btnDownload_Click(object sender, EventArgs e)
+        {
+            IEnumerable<string> uris = new string[] { "http://mlb.com/lookup/named.cur_bio.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_pitching.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_fielding.bam" };
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            //build the collection of threaded tasks
+            List<Task> tasks = new List<Task>();
+            foreach (var downloadUri in uris)
+            {
+                tasks.Add(downloadFile(downloadUri));
+            }
+            UpdateStatus(string.Format("downloading {0} files.", uris.Count()));
+            Cursor = Cursors.AppStarting;
+            sw.Start();
+            //kick them all off & wait until they've all completed.
+            //Task.WaitAll(tasks.ToArray());
+            await Task.WhenAll(tasks.ToArray());
+            //var xml = new WebClient().DownloadString(new Uri(uris.First()));
+            sw.Stop();
+            Cursor = Cursors.Default;
+            UpdateStatus(string.Format("Completed in {0} seconds.", sw.Elapsed));
+            //write them all to disk
+            foreach (Task<string> result in tasks)
+            {
+                var xmlResult = result.Result;
+                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.LoadXml(xmlResult);
+                string fileName = string.Format("{0}.xml", xmlDoc.DocumentElement.Name);
+                using (StreamWriter writer = new StreamWriter(fileName,false))
+                {
+                    writer.Write(xmlResult);
+                    writer.Flush();
+                    writer.Close();
+                }
+            }
+        }
+        static async Task<string> downloadFile(string url)
+        {
+            return await new WebClient().DownloadStringTaskAsync(new Uri(url));
         }
     }
 }
