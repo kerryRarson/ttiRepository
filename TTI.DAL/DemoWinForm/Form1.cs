@@ -156,8 +156,10 @@ namespace DemoWinForm
 
         private async void btnDownload_Click(object sender, EventArgs e)
         {
-            IEnumerable<string> uris = new string[] { "http://mlb.com/lookup/named.cur_bio.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_pitching.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_fielding.bam" };
+            const string CONN_STRING = @"Data Source=
+            IEnumerable<string> uris = new string[] { "http://mlb.com/lookup/named.cur_bio.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_hitting.bam?season=%272013%27", "http://mlb.com/lookup/named.cur_pitching.bam", "http://mlb.com/lookup/named.cur_fielding.bam" };
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            
             //build the collection of threaded tasks
             List<Task> tasks = new List<Task>();
             foreach (var downloadUri in uris)
@@ -177,14 +179,38 @@ namespace DemoWinForm
             this.Refresh();
 
             Cursor = Cursors.WaitCursor;
+            //initialize the db tables
+            using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(CONN_STRING))
+            {
+                conn.Open();
+                using (System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("truncate table temp.curBio_v2;", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+
             //write them all to disk
+            //clean up any previous .xml files
+            DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory());
+            FileInfo[] files = di.GetFiles("*.xml")
+                     .Where(p => p.Extension == ".xml").ToArray();
+            foreach (FileInfo file in files)
+            {
+                file.Attributes = FileAttributes.Normal;
+                File.Delete(file.FullName);
+            }
+                
+                
+            // save the Task results to disk as .xml files
             foreach (Task<string> result in tasks)
             {
                 var xmlResult = result.Result;
                 System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
                 xmlDoc.LoadXml(xmlResult);
                 string fileName = string.Format("{0}.xml", xmlDoc.DocumentElement.Name);
-                using (StreamWriter writer = new StreamWriter(fileName,false))
+                //append to the .xml if it exists
+                using (StreamWriter writer = new StreamWriter(fileName, true))
                 {
                     writer.Write(xmlResult);
                 }
@@ -195,18 +221,8 @@ namespace DemoWinForm
                 lstPlayers.Items.Add(string.Format("{0} tables in {1} dataset...", ds.Tables.Count, fileName));
                 lstPlayers.Items.Add(string.Format("{0} rows.", ds.Tables[1].Rows.Count));
 
-                if (fileName.ToLower().Contains("cur_bio"))
+                if (fileName.ToLower().Equals("cur_bio.xml"))
                 {
-                    
-                    using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(CONN_STRING))
-                    {
-                        conn.Open();
-                        using (System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("truncate table temp.curBio_v2", conn))
-                        {
-                            cmd.ExecuteNonQuery();
-                        }
-                        conn.Close();
-                    }
                     using (System.Data.SqlClient.SqlBulkCopy sbc = new System.Data.SqlClient.SqlBulkCopy(CONN_STRING))
                     {
                         sbc.DestinationTableName="temp.curBio_v2";
@@ -234,6 +250,11 @@ namespace DemoWinForm
             }
             Cursor = Cursors.Default;
         }
+        /// <summary>
+        /// uses WebClient to return a Task object that will be used to download the passed in url
+        /// </summary>
+        /// <param name="url">The URL of the file to download</param>
+        /// <returns>a Task object that returns a string</returns>
         static async Task<string> downloadFile(string url)
         {
             return await new WebClient().DownloadStringTaskAsync(new Uri(url));
