@@ -55,8 +55,14 @@ namespace DemoWinForm
 
         public void BindStates(IList<TTI.DAL.Model.State> states)
         {
-            cboStates.DataSource = states;
             UnlockUI();
+            if (cboStates.InvokeRequired) {
+                cboStates.BeginInvoke(new Action(() => {
+                    cboStates.DataSource = states;
+                }));
+            }
+            else { cboStates.DataSource = states; }
+            
             UpdateStatus(string.Format("{0} states loaded.", states.Count));
         }
 
@@ -75,9 +81,22 @@ namespace DemoWinForm
         }
         private void UnlockUI()
         {
-            btnLoadStates.Enabled = true;
-            btnLoadStatesAsync.Enabled = true;
-            cboStates.Enabled = true;
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Action(() =>
+                {
+                    btnLoadStates.Enabled = true;
+                    btnLoadStatesAsync.Enabled = true;
+                    cboStates.Enabled = true;
+                })
+                );
+            }
+            else
+            {
+                btnLoadStates.Enabled = true;
+                btnLoadStatesAsync.Enabled = true;
+                cboStates.Enabled = true;
+            }
         }
 
         private void btnLoadStatesAsync_Click(object sender, EventArgs e)
@@ -93,9 +112,9 @@ namespace DemoWinForm
                 await Task.Run(() =>
                 {
                     _presenter.LoadStates();
-                    Cursor = Cursors.Default;
                     UnlockUI();
                 });
+                Cursor = Cursors.Default;
             }
             catch (Exception err)
             {
@@ -137,7 +156,11 @@ namespace DemoWinForm
         {
             //load the players for the selected org
             Cursor = Cursors.WaitCursor;
-            string club = cboStates.SelectedValue.ToString();
+            string state = cboStates.SelectedValue.ToString();
+            //just get some random clubs...
+            string club = string.Empty;
+            if (state.Equals("AK")) club = "COL";
+            if (state.Equals("MT")) club = "CHC";
             UpdateStatus(string.Format("Getting players for {0}...", club));
             var players = await Task<List<TTI.DAL.Model.CurBio>>.Run(() => { return getPlayersFor(club); });
 
@@ -148,7 +171,7 @@ namespace DemoWinForm
             lstPlayers.Items.Clear();
             foreach (var player in players)
             {
-                lstPlayers.Items.Add( player.Name + " " + player.Pos);
+                lstPlayers.Items.Add( player.Name + " " + player.JerseyNumber);
             }
             UpdateStatus(string.Format("{0} players.", players.Count));
             Cursor = Cursors.Default;
@@ -156,17 +179,21 @@ namespace DemoWinForm
 
         private async void btnDownload_Click(object sender, EventArgs e)
         {
-            const string CONN_STRING = @"Data Source=
-            IEnumerable<string> uris = new string[] { "http://mlb.com/lookup/named.cur_bio.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_hitting.bam?season=%272013%27", "http://mlb.com/lookup/named.cur_pitching.bam", "http://mlb.com/lookup/named.cur_fielding.bam" };
+            const string CONN_STRING = @"Data Source=(local);Initial Catalog=DataPro;Trusted_Connection=true;Connect Timeout=60";
+            //IEnumerable<string> uris = new string[] { "http://mlb.com/lookup/named.cur_bio.bam", "http://mlb.com/lookup/named.cur_hitting.bam", "http://mlb.com/lookup/named.cur_hitting.bam?season=%272013%27", "http://mlb.com/lookup/named.cur_pitching.bam", "http://mlb.com/lookup/named.cur_fielding.bam" };
+            List<MLBAMFeed> feeds = new List<MLBAMFeed>();
+            feeds.Add(new MLBAMFeed() { Url = "http://mlb.com/lookup/named.cur_hitting.bam?season=%272013%27", FileName = "cur_hitting_2013.xml", DestinationTable="temp.curbat_v2" });
+            feeds.Add(new MLBAMFeed() { Url = "http://mlb.com/lookup/named.cur_hitting.bam", FileName = "cur_hitting.xml", DestinationTable = "temp.curbat_v2" });
+
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             
             //build the collection of threaded tasks
             List<Task> tasks = new List<Task>();
-            foreach (var downloadUri in uris)
+            foreach (var xmlFeed in feeds)
             {
-                tasks.Add(downloadFile(downloadUri));
+                tasks.Add(downloadFile(xmlFeed));
             }
-            UpdateStatus(string.Format("downloading {0} files.", uris.Count()));
+            UpdateStatus(string.Format("downloading {0} files.", feeds.Count()));
             Cursor = Cursors.AppStarting;
             sw.Start();
 
@@ -203,16 +230,16 @@ namespace DemoWinForm
                 
                 
             // save the Task results to disk as .xml files
-            foreach (Task<string> result in tasks)
+            foreach (Task<MLBAMFeed> result in tasks)
             {
-                var xmlResult = result.Result;
+                MLBAMFeed xmlResult = result.Result;
                 System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
-                xmlDoc.LoadXml(xmlResult);
-                string fileName = string.Format("{0}.xml", xmlDoc.DocumentElement.Name);
+                xmlDoc.LoadXml(xmlResult.XML);
+                string fileName = xmlResult.FileName; //string.Format("{0}.xml", xmlDoc.DocumentElement.Name);
                 //append to the .xml if it exists
                 using (StreamWriter writer = new StreamWriter(fileName, true))
                 {
-                    writer.Write(xmlResult);
+                    writer.Write(xmlResult.XML);
                 }
 
                 //Load it into a dataset so we can bcp it
@@ -255,9 +282,12 @@ namespace DemoWinForm
         /// </summary>
         /// <param name="url">The URL of the file to download</param>
         /// <returns>a Task object that returns a string</returns>
-        static async Task<string> downloadFile(string url)
+        static async Task<MLBAMFeed> downloadFile(MLBAMFeed xmlFeed)
         {
-            return await new WebClient().DownloadStringTaskAsync(new Uri(url));
+            var rtn = xmlFeed;
+            string xml = await new WebClient().DownloadStringTaskAsync(new Uri(xmlFeed.Url));
+            rtn.XML = xml;
+            return rtn;
         }
     }
 }

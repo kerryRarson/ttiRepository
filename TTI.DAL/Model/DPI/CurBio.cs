@@ -15,6 +15,7 @@ namespace TTI.DAL.Model
         public virtual string Pos { get; set; }
         public virtual string Bats { get; set; }
         public virtual string Throws { get; set; }
+        public virtual string JerseyNumber { get; set; }
 
     }
 }

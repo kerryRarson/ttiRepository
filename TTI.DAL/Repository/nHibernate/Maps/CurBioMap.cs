@@ -19,6 +19,7 @@ namespace TTI.DAL.Maps
             Map(x => x.TeamId).Column("team_id");
             Map(x => x.Bats).Column("bats");
             Map(x => x.Throws).Column("throws");
+            Map(x => x.JerseyNumber).Column("Uniform_No");
         }
 
     }
